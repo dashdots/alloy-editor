@@ -94,7 +94,7 @@
              * @param {DOM event} event dragover event, as received natively from CKEditor
              */
             _onDragOver: function(event) {
-                event.dataTransfer.dropEffect = 'copy';
+                event.data.$.dataTransfer.dropEffect = 'copy';
                 if (isIE) {
                     this._preventEvent(event);
                 }
