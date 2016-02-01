@@ -22531,6 +22531,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * @param {DOM event} event dragover event, as received natively from CKEditor
          */
         _onDragOver: function _onDragOver(event) {
+            event.dataTransfer.dropEffect = 'copy';
             if (isIE) {
                 this._preventEvent(event);
             }
