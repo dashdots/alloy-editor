@@ -55,23 +55,19 @@
                     var editor = event.listenerData.editor;
 
                     if (pastedData.type.indexOf('image') === 0) {
-                        var reader = new FileReader();
                         var imageFile = pastedData.getAsFile();
+                        imageFile.preview = URL.createObjectURL(imageFile);
 
-                        reader.onload = function(event) {
-                            var el = CKEDITOR.dom.element.createFromHtml('<img src="' + event.target.result + '">');
+                        var el = CKEDITOR.dom.element.createFromHtml('<img data-imgsrc="' + imageFile.preview + '" src="' + imageFile.preview + '">');
 
-                            editor.insertElement(el);
+                        editor.insertElement(el);
 
-                            var imageData = {
-                                el: el,
-                                file: imageFile
-                            };
+                        var imageData = {
+                            el: el,
+                            file: imageFile
+                        };
 
-                            editor.fire('imageAdd', imageData);
-                        }.bind(this);
-
-                        reader.readAsDataURL(imageFile);
+                        editor.fire('imageAdd', imageData);
                     }
                 }
             }

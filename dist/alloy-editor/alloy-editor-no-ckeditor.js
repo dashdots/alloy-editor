@@ -21868,24 +21868,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * @param {DOM event} event The event to be prevented.
          */
         _processFile: function _processFile(file, editor) {
-            var reader = new FileReader();
 
-            reader.addEventListener('loadend', function () {
-                var bin = reader.result;
+            file.preview = URL.createObjectURL(file);
 
-                var el = CKEDITOR.dom.element.createFromHtml('<img src="' + bin + '">');
+            var el = CKEDITOR.dom.element.createFromHtml('<img data-imgsrc="' + file.preview + '" src="' + file.preview + '">');
 
-                editor.insertElement(el);
+            editor.insertElement(el);
 
-                var imageData = {
-                    el: el,
-                    file: file
-                };
+            var imageData = {
+                el: el,
+                file: file
+            };
 
-                editor.fire('imageAdd', imageData);
-            });
-
-            reader.readAsDataURL(file);
+            editor.fire('imageAdd', imageData);
         }
     });
 })();
@@ -22849,23 +22844,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 var editor = event.listenerData.editor;
 
                 if (pastedData.type.indexOf('image') === 0) {
-                    var reader = new FileReader();
                     var imageFile = pastedData.getAsFile();
+                    imageFile.preview = URL.createObjectURL(imageFile);
 
-                    reader.onload = function (event) {
-                        var el = CKEDITOR.dom.element.createFromHtml('<img src="' + event.target.result + '">');
+                    var el = CKEDITOR.dom.element.createFromHtml('<img data-imgsrc="' + imageFile.preview + '" src="' + imageFile.preview + '">');
 
-                        editor.insertElement(el);
+                    editor.insertElement(el);
 
-                        var imageData = {
-                            el: el,
-                            file: imageFile
-                        };
+                    var imageData = {
+                        el: el,
+                        file: imageFile
+                    };
 
-                        editor.fire('imageAdd', imageData);
-                    }.bind(this);
-
-                    reader.readAsDataURL(imageFile);
+                    editor.fire('imageAdd', imageData);
                 }
             }
         }
@@ -28362,6 +28353,81 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     });
 
     AlloyEditor.Buttons[ButtonImageAlignRight.key] = AlloyEditor.ButtonImageAlignRight = ButtonImageAlignRight;
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    /**
+     * The ButtonImage class inserts an image to the content.
+     *
+     * @class ButtonImage
+     */
+
+    var ButtonImageEditor = React.createClass({
+        displayName: 'ButtonImageEditor',
+
+        mixins: [AlloyEditor.ButtonStateClasses],
+
+        // Allows validating props being passed to the component.
+        propTypes: {
+            /**
+             * The editor instance where the component is being used.
+             *
+             * @property {Object} editor
+             */
+            editor: React.PropTypes.object.isRequired,
+
+            /**
+             * The label that should be used for accessibility purposes.
+             *
+             * @property {String} label
+             */
+            label: React.PropTypes.string,
+
+            /**
+             * The tabIndex of the button in its toolbar current state. A value other than -1
+             * means that the button has focus and is the active element.
+             *
+             * @property {Number} tabIndex
+             */
+            tabIndex: React.PropTypes.number
+        },
+
+        // Lifecycle. Provides static properties to the widget.
+        statics: {
+            /**
+             * The name which will be used as an alias of the button in the configuration.
+             *
+             * @static
+             * @property {String} key
+             * @default image
+             */
+            key: 'imageEditor'
+        },
+
+        /**
+         * Lifecycle. Renders the UI of the button.
+         *
+         * @method render
+         * @return {Object} The content which should be rendered.
+         */
+        render: function render() {
+            var cssClass = 'ae-button ' + this.getStateClasses();
+            var img = this.props.editor.get('nativeEditor').getSelection().getSelectedElement();
+            return React.createElement(
+                'button',
+                { 'aria-label': AlloyEditor.Strings.editImage, className: cssClass, 'data-type': 'button-image-editor',
+                    onClick: function onClick() {
+                        ButtonImageEditor.editorHandler('edit', img);
+                    },
+                    tabIndex: this.props.tabIndex, title: AlloyEditor.Strings.editImage },
+                React.createElement('span', { className: 'ae-icon-image' })
+            );
+        }
+    });
+    AlloyEditor.Buttons[ButtonImageEditor.key] = AlloyEditor.ButtonImageEditor = ButtonImageEditor;
 })();
 'use strict';
 

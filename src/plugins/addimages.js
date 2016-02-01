@@ -163,24 +163,19 @@
              * @param {DOM event} event The event to be prevented.
              */
             _processFile: function(file, editor) {
-                var reader = new FileReader();
 
-                reader.addEventListener('loadend', function() {
-                    var bin = reader.result;
+                file.preview = URL.createObjectURL(file);
 
-                    var el = CKEDITOR.dom.element.createFromHtml('<img src="' + bin + '">');
+                var el = CKEDITOR.dom.element.createFromHtml('<img data-imgsrc="' + file.preview + '" src="' + file.preview + '">');
 
-                    editor.insertElement(el);
+                editor.insertElement(el);
 
-                    var imageData = {
-                        el: el,
-                        file: file
-                    };
+                var imageData = {
+                    el: el,
+                    file: file
+                };
 
-                    editor.fire('imageAdd', imageData);
-                });
-
-                reader.readAsDataURL(file);
+                editor.fire('imageAdd', imageData);
             }
         }
     );
