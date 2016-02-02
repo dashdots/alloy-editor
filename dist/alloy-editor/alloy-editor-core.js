@@ -1566,6 +1566,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             event.listenerData.editor.createSelectionFromPoint(nativeEvent.clientX, nativeEvent.clientY);
 
             this._handleFiles(nativeEvent.dataTransfer.files, editor);
+
+            editor.fire('dataDrop', nativeEvent);
         },
 
         /**

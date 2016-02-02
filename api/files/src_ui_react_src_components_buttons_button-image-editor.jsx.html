@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>src\ui\react\src\oop\base.js - alloyeditor</title>
+    <title>src\ui\react\src\components\buttons\button-image-editor.jsx - alloyeditor</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="../assets/favicon.ico">
@@ -168,83 +168,79 @@
                     <div id="docs-main">
                         <div class="content">
                             <div class="page-header">
-                              <h1><small>File</small> <code>src\ui\react\src\oop\base.js</code></h1>
+                              <h1><small>File</small> <code>src\ui\react\src\components\buttons\button-image-editor.jsx</code></h1>
                             </div>
                             
                             <div class="file">
                                 <pre class="code prettyprint linenums">
-                            (function() {
+                            (function () {
                                 &#x27;use strict&#x27;;
                             
                                 /**
-                                 * Quick and dirty impl of Base class.
+                                 * The ButtonImage class inserts an image to the content.
                                  *
-                                 * @class Base
-                                 * @constructor
+                                 * @class ButtonImage
                                  */
-                                function Base(config) {
-                                    Base.superclass.constructor.call(this, config);
+                                var ButtonImageEditor = React.createClass({
+                                    mixins: [AlloyEditor.ButtonStateClasses],
                             
-                                    this.init(config);
-                                }
+                                    // Allows validating props being passed to the component.
+                                    propTypes: {
+                                        /**
+                                         * The editor instance where the component is being used.
+                                         *
+                                         * @property {Object} editor
+                                         */
+                                        editor: React.PropTypes.object.isRequired,
                             
-                                AlloyEditor.OOP.extend(Base, AlloyEditor.Attribute, {
-                                    /**
-                                     * Calls the &#x60;initializer&#x60; method of each class which extends Base starting from the parent to the child.
-                                     * Will pass the configuration object to each initializer method.
-                                     *
-                                     * @method init
-                                     * @param {Object} config Configuration object
-                                     */
-                                    init: function(config) {
-                                        this._callChain(&#x27;initializer&#x27;, config);
+                                        /**
+                                         * The label that should be used for accessibility purposes.
+                                         *
+                                         * @property {String} label
+                                         */
+                                        label: React.PropTypes.string,
+                            
+                                        /**
+                                         * The tabIndex of the button in its toolbar current state. A value other than -1
+                                         * means that the button has focus and is the active element.
+                                         *
+                                         * @property {Number} tabIndex
+                                         */
+                                        tabIndex: React.PropTypes.number
+                                    },
+                            
+                                    // Lifecycle. Provides static properties to the widget.
+                                    statics: {
+                                        /**
+                                         * The name which will be used as an alias of the button in the configuration.
+                                         *
+                                         * @static
+                                         * @property {String} key
+                                         * @default image
+                                         */
+                                        key: &#x27;imageEditor&#x27;
                                     },
                             
                                     /**
-                                     * Calls the &#x60;destructor&#x60; method of each class which extends Base starting from the parent to the child.
+                                     * Lifecycle. Renders the UI of the button.
                                      *
-                                     * @method destroy
+                                     * @method render
+                                     * @return {Object} The content which should be rendered.
                                      */
-                                    destroy: function() {
-                                        this._callChain(&#x27;destructor&#x27;);
+                                    render: function() {
+                                        var cssClass = &#x27;ae-button &#x27; + this.getStateClasses();
+                                        var img = this.props.editor.get(&#x27;nativeEditor&#x27;).getSelection().getSelectedElement();
+                                        return (
+                                            &lt;button aria-label={AlloyEditor.Strings.editImage} className={cssClass} data-type=&quot;button-image-editor&quot;
+                                                    onClick={()=&gt;{ButtonImageEditor.editorHandler(&#x27;edit&#x27;,img);}}
+                                                    tabIndex={this.props.tabIndex} title={AlloyEditor.Strings.editImage}&gt;
+                                                &lt;span className=&quot;ae-icon-image&quot;/&gt;
+                                            &lt;/button&gt;
+                                        );
                                     },
-                            
-                                    /**
-                                     * Calls a method of each class, which is being present in the hierarchy starting from parent to the child.
-                                     *
-                                     * @protected
-                                     * @method _callChain
-                                     * @param {String} wat  The method, which should be invoked
-                                     * @param {Object|Array} args The arguments with which the method should be invoked
-                                     */
-                                    _callChain: function(wat, args) {
-                                        var arr = [];
-                            
-                                        var ctor = this.constructor;
-                            
-                                        while(ctor) {
-                                            if (AlloyEditor.Lang.isFunction(ctor.prototype[wat])) {
-                                                arr.push(ctor.prototype[wat]);
-                                            }
-                            
-                                            ctor = ctor.superclass ? ctor.superclass.constructor : null;
-                                        }
-                            
-                                        arr = arr.reverse();
-                            
-                                        args = AlloyEditor.Lang.isArray(args) ? args : [args];
-                            
-                                        for (var i = 0; i &lt; arr.length; i++) {
-                                            var item = arr[i];
-                            
-                                            item.apply(this, args);
-                                        }
-                                    }
                                 });
-                            
-                                AlloyEditor.Base = Base;
+                                AlloyEditor.Buttons[ButtonImageEditor.key] = AlloyEditor.ButtonImageEditor = ButtonImageEditor;
                             }());
-                            
                                 </pre>
                             </div>
                         </div>
