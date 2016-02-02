@@ -41,7 +41,7 @@ AlloyEditor.Strings = {
     "rowDelete":"删除行",
     "rowInsertAfter":"在下方插入行",
     "rowInsertBefore":"在上方插入行",
-    "add":"Add",
+    "add":"增加",
     "ariaUpdateNoToolbar":"工具栏暂不可用",
     "ariaUpdateOneToolbar":"{toolbars} 工具栏暂不可用. 请按 ALT+F10 选中",
     "ariaUpdateManyToolbars":"{toolbars} 请按 ALT+F10 唤出工具栏",

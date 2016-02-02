@@ -87,35 +87,27 @@
         _onInputChange: function() {
             var inputEl = ReactDOM.findDOMNode(this.refs.fileInput);
 
-            // On IE11 the function might be called with an empty array of
-            // files. In such a case, no actions will be taken.
-            if (!inputEl.files.length) {
-                return;
-            }
 
-            var reader = new FileReader();
             var file = inputEl.files[0];
 
-            reader.onload = function(event) {
-                var editor = this.props.editor.get('nativeEditor');
-
-                var el = CKEDITOR.dom.element.createFromHtml('<img src="' + event.target.result + '">');
-
-                editor.insertElement(el);
-
-                editor.fire('actionPerformed', this);
-
-                var imageData = {
-                    el: el,
-                    file: file
-                };
-
-                editor.fire('imageAdd', imageData);
-            }.bind(this);
-
-            reader.readAsDataURL(file);
-
             inputEl.value = '';
+
+            var editor = this.props.editor.get('nativeEditor');
+
+            file.preview = URL.createObjectURL(file);
+
+            var el = CKEDITOR.dom.element.createFromHtml('<img data-imgsrc="' + file.preview + '" src="' + file.preview + '">');
+
+            editor.insertElement(el);
+
+            editor.fire('actionPerformed', this);
+
+            var imageData = {
+                el: el,
+                file: file
+            };
+
+            editor.fire('imageAdd', imageData);
         }
 
         /**
